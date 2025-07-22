@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  frr-hub:
+    image: frrouting/frr:latest
+    container_name: frr-hub
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ./frr/hub/frr.conf:/etc/frr/frr.conf
+      - ./frr/hub/vtysh.conf:/etc/frr/vtysh.conf
+      - ./frr/hub/daemons:/etc/frr/daemons
+    networks:
+      sdwan_net:
+        ipv4_address: 10.10.10.254
+
+  frr-spoke1:
+    image: frrouting/frr:latest
+    container_name: frr-spoke1
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ./frr/spoke1/frr.conf:/etc/frr/frr.conf
+      - ./frr/spoke1/vtysh.conf:/etc/frr/vtysh.conf
+      - ./frr/spoke1/daemons:/etc/frr/daemons
+    networks:
+      sdwan_net:
+        ipv4_address: 10.10.10.2
+
+  frr-spoke2:
+    image: frrouting/frr:latest
+    container_name: frr-spoke2
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ./frr/spoke2/frr.conf:/etc/frr/frr.conf
+      - ./frr/spoke2/vtysh.conf:/etc/frr/vtysh.conf
+      - ./frr/spoke2/daemons:/etc/frr/daemons
+    networks:
+      sdwan_net:
+        ipv4_address: 10.10.10.3
+
+  frr-spoke3:
+    image: frrouting/frr:latest
+    container_name: frr-spoke3
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ./frr/spoke3/frr.conf:/etc/frr/frr.conf
+      - ./frr/spoke3/vtysh.conf:/etc/frr/vtysh.conf
+      - ./frr/spoke3/daemons:/etc/frr/daemons
+    networks:
+      sdwan_net:
+        ipv4_address: 10.10.10.4
+
+networks:
+  sdwan_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.10.0/24
